@@ -1681,7 +1681,7 @@ module powerbi.extensibility.visual {
             const barHeights: any = [];
             const width: number = this.optionsUpdate.viewport.width;
             let height: number = this.optionsUpdate.viewport.height;
-            if (this.legend.getOrientation() === LegendPosition.BottomCenter || this.legend.getOrientation() === LegendPosition.Bottom) 
+            if (this.legend.getOrientation() === LegendPosition.BottomCenter || this.legend.getOrientation() === LegendPosition.Bottom)
                 height = height - this.legend.getMargins().height;
             const valuesCategory: any = this.optionsUpdate.dataViews[0].categorical.values;
             const filterValues: any = []; //rect coordinates
@@ -1697,7 +1697,7 @@ module powerbi.extensibility.visual {
             let widthForBars: number = 0;
             if (this.settings.chartOrientation.orientation === 'Vertical') {
                 widthForBars = width - (barOuterPad * 2);
-            } else 
+            } else
                 widthForBars = height - (barOuterPad * 2);
             const barWidth: number = sixthValue * widthForBars / (7 * testDataForTree.length - 1), barPad: number = barWidth / sixthValue;
             globalpadding = barPad;
@@ -2016,88 +2016,93 @@ module powerbi.extensibility.visual {
         }
         // tslint:disable-next-line:cyclomatic-complexity
         public update(options: VisualUpdateOptions): void {
-            this.events.renderingStarted(options);
-            THIS = this;
-            this.optionsUpdate = options;
-            this.handleLandingPage(options);
-            let axisliteral: number = 0;
-            THIS.selector = 0;
-            globalTreeChartDataPoints = [];
-            let dDataObject: any = {};
-            this.remove();
-            const errormsg: any = d3.select(this.optionsNew.element).append('div').classed('barmsg', true);
-            const svg: any = this.svg = d3.select(this.optionsNew.element).append('svg').classed('barChart', true).style({ display: 'inline-block' });
-            this.body = d3.select(this.optionsNew.element);
-            this.interactivityService = createInteractivityService(this.host);
-            THIS.data = [];
-            THIS.dataNew = [];
-            THIS.dataAxis = [];
-            THIS.selectionID = [];
-            THIS.tooltipData = [];
-            this.viewport = options.viewport;
-            let isAxisAvailable: boolean = false;
-            let isLegendAvailable: boolean = false;
-            let isValueAvailable: boolean = false;
-            let isSubLegendAvailable: boolean = false;
-            let isBothSameAvailable: boolean = false;
-            let isSameAxisLegendAvailable: boolean = false;
-            let axisIndex: number = 0;
-            let subLegendIndex: number = 0;
-            const valueIndex: number = 0;
-            let categoryLength: number;
-            let category: any;
-            this.svg.on('contextmenu', () => {
-                const mouseEvent: MouseEvent = <MouseEvent>d3.event;
-                const eventTarget: EventTarget = mouseEvent.target;
-                const dataPoint: any = d3.select(eventTarget).datum();
-                if (dataPoint.identity !== undefined) {
-                    this.selectionManager.showContextMenu(dataPoint.identity, {
-                        x: mouseEvent.clientX, y: mouseEvent.clientY
-                    });
-                    mouseEvent.preventDefault();
-                }
-            });
-            if (options.dataViews.length) {
-                this.settings = this.parseSettings(options && options.dataViews && options.dataViews[0]);
-                if (options.dataViews[0].categorical.categories) {
-                    category = options.dataViews[0].categorical.categories;
-                    categoryLength = category.length;
-                    for (let iterator: number = 0; iterator < categoryLength; iterator++) {
-                        if (category[iterator].source.roles.Axis) {
-                            isAxisAvailable = true; axisIndex = iterator;
-                        }
-                        if (category[iterator].source.roles.SubLegend) {
-                            isSubLegendAvailable = true; subLegendIndex = iterator;
-                        }
-                        if (category[iterator].source.roles.SubLegend && category[iterator].source.roles.Legend) {
-                            isBothSameAvailable = true;
-                        }
-                        if (category[iterator].source.roles.Legend && category[iterator].source.roles.Axis) {
-                            isSameAxisLegendAvailable = true;
+            try {
+                this.events.renderingStarted(options);
+                THIS = this;
+                this.optionsUpdate = options;
+                this.handleLandingPage(options);
+                let axisliteral: number = 0;
+                THIS.selector = 0;
+                globalTreeChartDataPoints = [];
+                let dDataObject: any = {};
+                this.remove();
+                const errormsg: any = d3.select(this.optionsNew.element).append('div').classed('barmsg', true);
+                const svg: any = this.svg = d3.select(this.optionsNew.element).append('svg').classed('barChart', true).style({ display: 'inline-block' });
+                this.body = d3.select(this.optionsNew.element);
+                this.interactivityService = createInteractivityService(this.host);
+                THIS.data = [];
+                THIS.dataNew = [];
+                THIS.dataAxis = [];
+                THIS.selectionID = [];
+                THIS.tooltipData = [];
+                this.viewport = options.viewport;
+                let isAxisAvailable: boolean = false;
+                let isLegendAvailable: boolean = false;
+                let isValueAvailable: boolean = false;
+                let isSubLegendAvailable: boolean = false;
+                let isBothSameAvailable: boolean = false;
+                let isSameAxisLegendAvailable: boolean = false;
+                let axisIndex: number = 0;
+                let subLegendIndex: number = 0;
+                const valueIndex: number = 0;
+                let categoryLength: number;
+                let category: any;
+                this.svg.on('contextmenu', () => {
+                    const mouseEvent: MouseEvent = <MouseEvent>d3.event;
+                    const eventTarget: EventTarget = mouseEvent.target;
+                    const dataPoint: any = d3.select(eventTarget).datum();
+                    if (dataPoint.identity !== undefined) {
+                        this.selectionManager.showContextMenu(dataPoint.identity, {
+                            x: mouseEvent.clientX, y: mouseEvent.clientY
+                        });
+                        mouseEvent.preventDefault();
+                    }
+                });
+                if (options.dataViews.length) {
+                    this.settings = this.parseSettings(options && options.dataViews && options.dataViews[0]);
+                    if (options.dataViews[0].categorical.categories) {
+                        category = options.dataViews[0].categorical.categories;
+                        categoryLength = category.length;
+                        for (let iterator: number = 0; iterator < categoryLength; iterator++) {
+                            if (category[iterator].source.roles.Axis) {
+                                isAxisAvailable = true; axisIndex = iterator;
+                            }
+                            if (category[iterator].source.roles.SubLegend) {
+                                isSubLegendAvailable = true; subLegendIndex = iterator;
+                            }
+                            if (category[iterator].source.roles.SubLegend && category[iterator].source.roles.Legend) {
+                                isBothSameAvailable = true;
+                            }
+                            if (category[iterator].source.roles.Legend && category[iterator].source.roles.Axis) {
+                                isSameAxisLegendAvailable = true;
+                            }
                         }
                     }
-                }
-                if (options.dataViews[0].categorical.values !== undefined &&
-                    options.dataViews[0].categorical.values.source !== undefined) {
-                    isLegendAvailable = true;
-                    for (let oiterator: number = 0; oiterator < options.dataViews[0].metadata.columns.length; oiterator++) {
-                        if (options.dataViews[0].metadata.columns[oiterator].roles.Value !== undefined) {
-                            isValueAvailable = true;
-                            break;
+                    if (options.dataViews[0].categorical.values !== undefined &&
+                        options.dataViews[0].categorical.values.source !== undefined) {
+                        isLegendAvailable = true;
+                        for (let oiterator: number = 0; oiterator < options.dataViews[0].metadata.columns.length; oiterator++) {
+                            if (options.dataViews[0].metadata.columns[oiterator].roles.Value !== undefined) {
+                                isValueAvailable = true;
+                                break;
+                            }
                         }
                     }
-                }
-                this.visualPrinter(options, isAxisAvailable, isLegendAvailable, isValueAvailable, category, axisIndex, isSubLegendAvailable, subLegendIndex,
-                    axisliteral, dDataObject, valueIndex, errormsg, isBothSameAvailable, isSameAxisLegendAvailable)
+                    this.visualPrinter(options, isAxisAvailable, isLegendAvailable, isValueAvailable, category, axisIndex, isSubLegendAvailable, subLegendIndex,
+                        axisliteral, dDataObject, valueIndex, errormsg, isBothSameAvailable, isSameAxisLegendAvailable)
 
-            }
-            d3.select('html').on('click', (): void => {
-                if (THIS.settings.animation.show) {
-                    THIS.rootClick();
                 }
-            });
-            this.addSelection(globalTreeChartDataPoints);
-            this.events.renderingFinished(options);
+                d3.select('html').on('click', (): void => {
+                    if (THIS.settings.animation.show) {
+                        THIS.rootClick();
+                    }
+                });
+                this.addSelection(globalTreeChartDataPoints);
+                this.events.renderingFinished(options);
+            }
+            catch (exception) {
+                this.events.renderingFailed(options, exception);
+            }
         }
         private renderLegend(): void {
             if (!this.viewModel) {
